@@ -550,6 +550,8 @@ public class CovidVendor extends JPanel {
 			
 			System.out.println("Here you go");
 			
+			checkOrders();
+			
 			wait(2000);
 			
 			served = true; //Sets the next customer in motion only when player clicks on the Serve button
@@ -569,4 +571,22 @@ public class CovidVendor extends JPanel {
 	}
 	
    
+	public void checkOrders()
+	{
+		for(int i=0; i<customers.length; i++)
+		{
+			if(customers[i].getPosX() == barrier)
+			{
+				if(player.getOrderCheck(i))
+				{
+					player.increaseScore(10);
+				}
+				else
+				{
+					player.loseLife();
+				}
+				
+			}
+		}
+	}
 }

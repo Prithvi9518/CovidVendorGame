@@ -79,4 +79,15 @@ public class Vendor {
 		this.ordersCheck = new boolean[length];
 	}
 	
+	//Increasing the player score
+	public void increaseScore(int amount)
+	{
+		this.score += amount;
+	}
+	
+	public void loseLife()
+	{
+		this.lives --;
+	}
+	
 }
