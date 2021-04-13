@@ -39,9 +39,6 @@ public class CovidVendor extends JPanel {
 	
 	private boolean served = false; //Checks if a customer has been served or not. The next customer doesn't move forward until player presses the Serve button.
 	
-	private Date servedTime;
-	private double servedTimeSeconds;
-	
 	private boolean serveDialogueAppears = false;
 	
 
@@ -153,7 +150,7 @@ public class CovidVendor extends JPanel {
 	   drawButtons(g, buttons);
 	   drawLives(g);
 	   drawPhaseText(g);
-//	   drawServeDialogue(g);
+	   drawServeDialogue(g, serveDialogueAppears);
    }
    
    
@@ -263,11 +260,15 @@ public class CovidVendor extends JPanel {
    
    
    
-   public void drawServeDialogue(Graphics g)
+   public void drawServeDialogue(Graphics g, boolean serveDialogueAppears) //Doesn't work.
    {	
-	   String serveDialogueFilename = "serveDialogue.png";
-	   ImageIcon serveDialogueImg = new ImageIcon(serveDialogueFilename);
-	   g.drawImage(serveDialogueImg.getImage(), (int)player.getPosX()+7, (int)player.getPosY()-40, null);
+	   if(serveDialogueAppears)
+	   {
+		   String serveDialogueFilename = "serveDialogue.png";
+	       ImageIcon serveDialogueImg = new ImageIcon(serveDialogueFilename);
+	       g.drawImage(serveDialogueImg.getImage(), (int)player.getPosX()+7, (int)player.getPosY()-40, null);
+	   }
+	   
    }
    
    
@@ -506,11 +507,7 @@ public class CovidVendor extends JPanel {
 				   
 				   
 				   if(i != customers.length-1 && served == true)
-				   {
-					   //Adds a delay effect for the number of milliseconds passed in as argument. See method 'wait' down below 
-					    wait(2000);
-					   
-					   
+				   {   
 						customers[i+1].setWalking(true); //Enable walking for the next customer after pressing Serve
 				   }
 				 
@@ -533,14 +530,16 @@ public class CovidVendor extends JPanel {
 		if(buttonPressed ==  3)
 		{
 			barrierReached = false; //Disables serve button press until next customer reaches barrier.
+			
 			System.out.println("Here you go");
+			
 			wait(2000);
-	
+			
 			served = true; //Sets the next customer in motion only when player clicks on the Serve button
 		}
 	}
 	
-	public void wait(int ms)
+	public void wait(int ms) //Used to create a delay. The code that follows wait() will be called after 'ms' milliseconds
 	{
 		try
 		{
