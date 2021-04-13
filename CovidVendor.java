@@ -151,6 +151,7 @@ public class CovidVendor extends JPanel {
 	   drawLives(g);
 	   drawPhaseText(g);
 	   drawServeDialogue(g, serveDialogueAppears);
+	   drawScore(g);
    }
    
    
@@ -365,6 +366,14 @@ public class CovidVendor extends JPanel {
 	   }
    }
    
+   
+   //Drawing score
+   public void drawScore(Graphics g)
+   {
+	   g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+	   g.setColor(Color.BLACK);
+	   g.drawString("Score: "+player.getScore(),750,220);
+   }
    
    
    
