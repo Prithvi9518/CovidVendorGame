@@ -39,7 +39,7 @@ public class CovidVendor extends JPanel {
 	
 	private boolean served = false; //Checks if a customer has been served or not. The next customer doesn't move forward until player presses the Serve button.
 	
-	private boolean serveDialogueAppears = false;
+	private boolean serveDialogueAppears = false; //Didn't get this feature to work yet.
 	
 
 	
@@ -183,27 +183,31 @@ public class CovidVendor extends JPanel {
 	   
 	   for(int i=0; i<customers.length; i++)
        {
-               if(customers[i].getDishNum()==1)
+		   
+		   if(customers[i].isVisible()) //Customers disappear after they get their food.
+		   {
+			   if(customers[i].getMaskNum()==1)
                {
                     String customerImgFilename = "human-mask.png";
                     ImageIcon customerImg = new ImageIcon(customerImgFilename);
                     g.drawImage(customerImg.getImage(),(int)customers[i].getPosX(),(int)customers[i].getPosY(),null);
                }
 
-               if(customers[i].getDishNum()==2)
+               if(customers[i].getMaskNum()==2)
                {
                     String customerImgFilename = "human-undernose.png";
                     ImageIcon customerImg = new ImageIcon(customerImgFilename);
                     g.drawImage(customerImg.getImage(),(int)customers[i].getPosX(),(int)customers[i].getPosY(),null);
                }
 
-               if(customers[i].getDishNum()==3)
+               if(customers[i].getMaskNum()==3)
                {
                     String customerImgFilename = "human-nomask.png";
                     ImageIcon customerImg = new ImageIcon(customerImgFilename);
                     g.drawImage(customerImg.getImage(),(int)customers[i].getPosX(),(int)customers[i].getPosY(),null);
                }
-
+		   }
+		   
        }
 	   
 	   
@@ -227,7 +231,7 @@ public class CovidVendor extends JPanel {
  
    
    
-//Drawing the customer order dialogues.
+//Drawing the customer order dialogues. 
    public void drawOrderDialogue(Graphics g) 
    {
 	   for(int i=0; i<customers.length; i++)
@@ -260,7 +264,7 @@ public class CovidVendor extends JPanel {
    
    
    
-   public void drawServeDialogue(Graphics g, boolean serveDialogueAppears) //Doesn't work.
+   public void drawServeDialogue(Graphics g, boolean serveDialogueAppears) //Doesn't work yet.
    {	
 	   if(serveDialogueAppears)
 	   {
@@ -366,13 +370,13 @@ public class CovidVendor extends JPanel {
    
    
    
-//Setting up array of customers and randomizing their orders. See randomizeOrder method in Customer class.
+//Setting up array of customers and randomizing their orders and the way they put on their mask. See randomizeOrder method in Customer class.
    public void setupCustomers()
    {
 	   for(int i=0; i<customers.length; i++)
 		{
 			customers[i] = new Customer((400 + 70*i), 617);
-			customers[i].randomizeOrder();
+			customers[i].randomizeOrderMask();
 		}
    }
    
@@ -510,11 +514,15 @@ public class CovidVendor extends JPanel {
 				   {   
 						customers[i+1].setWalking(true); //Enable walking for the next customer after pressing Serve
 				   }
-				 
+				  
+				   if(served == true) //Customer disappears after they get their food.
+				   {
+					   customers[i].setVisible(false);
+				   }
 				  
 			   }
 			   
-			   if(i == customers.length-2) //I still don't know why this works but I was experimenting with different values and this worked somehow
+			   if(i == customers.length-1) //I still don't know why this works
 			   {
 				   served = false;
 			   }
