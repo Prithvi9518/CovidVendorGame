@@ -527,6 +527,8 @@ public class CovidVendor extends JPanel {
 				   if(served == true) //Customer disappears after they get their food.
 				   {
 					   customers[i].setVisible(false);
+					   customers[i].setPosX(1000);
+					   customers[i].setPosY(1000); //sends customers off the map after they turn invisible
 				   }
 				  
 			   }
@@ -571,7 +573,7 @@ public class CovidVendor extends JPanel {
 	}
 	
    
-	public void checkOrders()
+	public void checkOrders() // Has a bug //Edit: fixed the bug
 	{
 		for(int i=0; i<customers.length; i++)
 		{
@@ -587,6 +589,9 @@ public class CovidVendor extends JPanel {
 				}
 				
 			}
+			
 		}
+		
 	}
+	
 }
