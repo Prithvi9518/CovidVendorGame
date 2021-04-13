@@ -11,6 +11,8 @@ public class Customer {
 	private boolean ordered; //to track whether a customer has ordered or not.
 	private int dishNum; //1-Taco 2-Pizza 3-Burger
 	private boolean walking; //Controls when the customers start walking to pick up their food.
+	private boolean visible;
+	private int maskNum; //1- fully masked 2- mask under nose  3- no mask
 	
 	private double speedX = 1; // walking speed
 
@@ -21,6 +23,7 @@ public class Customer {
 		this.posY = posY;
 		ordered = false;
 		walking = false;
+		visible = true;
 	}
 	
 	//Getters
@@ -44,6 +47,16 @@ public class Customer {
 	public boolean isWalking() {
 		return walking;
 	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public int getMaskNum() {
+		return maskNum;
+	}
+	
+	
 	
 	
 	
@@ -68,6 +81,15 @@ public class Customer {
 	public void setWalking(boolean walking) {
 		this.walking = walking;
 	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public void setMaskNum(int maskNum) {
+		this.maskNum = maskNum;
+	}
+	
 	
 	
 	
@@ -80,11 +102,12 @@ public class Customer {
 		}
 	}
 	
-	public void randomizeOrder()
+	public void randomizeOrderMask()
 	{
 		Random rand = new Random();
 		
 		dishNum = rand.nextInt(3)+1;  //1- Taco, 2- Pizza, 3- Burger
+		maskNum = rand.nextInt(3) + 1; //1- fully masked 2- mask under nose  3- no mask
 	}
 	
 	
