@@ -8,6 +8,7 @@ public class Vendor {
 	private double posY;
 	private int lives;
 	private boolean[] ordersCheck;
+	private int score;
 	
 	//Constructor
 	public Vendor(double posX, double posY)
@@ -15,6 +16,7 @@ public class Vendor {
 		this.posX = posX;
 		this.posY = posY;
 		lives = 5;
+		score = 0;
 	}
 	
 	//Getters
@@ -34,6 +36,12 @@ public class Vendor {
 	{
 		return ordersCheck[index];
 	}
+
+	public int getScore() {
+		return score;
+	}
+	
+	
 	
 	//Setters
 	public void setPosX(double posX) {
@@ -52,6 +60,12 @@ public class Vendor {
 	{
 		this.ordersCheck[index] = orderCheck;
 	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	
 	
 //Methods
 	public void update()
