@@ -591,7 +591,7 @@ public class CovidVendor extends JPanel {
 			}
 			
 		}
-		
+		//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 	}
 	
 }
