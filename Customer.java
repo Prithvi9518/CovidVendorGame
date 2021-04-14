@@ -14,7 +14,7 @@ public class Customer {
 	private boolean visible;
 	private int maskNum; //1- fully masked 2- mask under nose  3- no mask
 	
-	private double speedX = 1; // walking speed
+	private double speedX = 0.5; // walking speed
 
 	//Constructor
 	public Customer(double posX, double posY) 
@@ -102,13 +102,18 @@ public class Customer {
 		}
 	}
 	
-	public void randomizeOrderMask()
+	public void randomizeOrder()
 	{
 		Random rand = new Random();
 		
 		dishNum = rand.nextInt(3)+1;  //1- Taco, 2- Pizza, 3- Burger
-		maskNum = rand.nextInt(3) + 1; //1- fully masked 2- mask under nose  3- no mask
 	}
 	
+	public void randomizeMask()
+	{
+		Random rand = new Random();
+		
+		maskNum = rand.nextInt(3) + 1; //1- fully masked 2- mask under nose  3- no mask
+	}
 	
 }
