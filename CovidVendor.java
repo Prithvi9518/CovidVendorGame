@@ -130,7 +130,7 @@ public class CovidVendor extends JPanel {
 	   if(gameTimeSeconds>16)
 	   {
 		   customersWalk(); //Customers walk one by one to collect their orders.
-		   
+
 		   
 	   }
 	   
@@ -174,34 +174,26 @@ public class CovidVendor extends JPanel {
 //Drawing the customers
    public void drawCustomers(Graphics g, Customer[] customers)
    {
-//	   String customerImgFilename = "human2.png";
-//	   ImageIcon customerImg = new ImageIcon(customerImgFilename);
-//	   
-//	   for(int i=0; i<customers.length; i++)
-//	   {
-//		   g.drawImage(customerImg.getImage(),(int)customers[i].getPosX(),(int)customers[i].getPosY(),null);
-//	   }
-	   
 	   for(int i=0; i<customers.length; i++)
        {
 		   
 		   if(customers[i].isVisible()) //Customers disappear after they get their food.
 		   {
-			   if(customers[i].getMaskNum()==1)
+			   if(customers[i].getMaskNum()==1) //Masked
                {
                     String customerImgFilename = "human-mask.png";
                     ImageIcon customerImg = new ImageIcon(customerImgFilename);
                     g.drawImage(customerImg.getImage(),(int)customers[i].getPosX(),(int)customers[i].getPosY(),null);
                }
 
-               if(customers[i].getMaskNum()==2)
+               if(customers[i].getMaskNum()==2) //Not fully masked
                {
                     String customerImgFilename = "human-undernose.png";
                     ImageIcon customerImg = new ImageIcon(customerImgFilename);
                     g.drawImage(customerImg.getImage(),(int)customers[i].getPosX(),(int)customers[i].getPosY(),null);
                }
 
-               if(customers[i].getMaskNum()==3)
+               if(customers[i].getMaskNum()==3) //No mask
                {
                     String customerImgFilename = "human-nomask.png";
                     ImageIcon customerImg = new ImageIcon(customerImgFilename);
@@ -367,7 +359,7 @@ public class CovidVendor extends JPanel {
    }
    
    
-   //Drawing score
+   //Drawing score text
    public void drawScore(Graphics g)
    {
 	   g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
@@ -425,15 +417,11 @@ public class CovidVendor extends JPanel {
 				
 				if(gameState==1)
 				{
-					if(gameTimeSeconds>9 && gameTimeSeconds<15) //Checks for clicks on buttons between 8 and 15 secs into the level
+					if(gameTimeSeconds>8 && gameTimeSeconds<15) //Checks for clicks on buttons between 8 and 15 secs into the level
 					{
 
 						int buttonPressed = checkButton(me.getX(),me.getY());  //stores the button pressed on every click.
 						
-						
-//BUG: it only allows for as many clicks as the number of customers. It even counts clicks on blank spaces. Have to fix it later.
-//EDIT: fixed the bug 
-
 
 						if(buttonPressed >=0 && customerIndex<customers.length) //Checks only when a button is clicked and when the number of clicks is not greater than number of customers
 						{
@@ -542,6 +530,10 @@ public class CovidVendor extends JPanel {
 		   }
 	}
 	
+	
+	
+	
+	
 	public void checkServe(int mouseX, int mouseY) //Called when a customer reaches the food stall, to check for clicks on Serve button
 	{
 		int buttonPressed = checkButton(mouseX,mouseY);
@@ -560,6 +552,10 @@ public class CovidVendor extends JPanel {
 		}
 	}
 	
+	
+	
+	
+	
 	public void wait(int ms) //Used to create a delay. The code that follows wait() will be called after 'ms' milliseconds
 	{
 		try
@@ -573,7 +569,11 @@ public class CovidVendor extends JPanel {
 	}
 	
    
-	public void checkOrders() // Has a bug //Edit: fixed the bug
+	
+	
+	
+	
+	public void checkOrders() //If player gets order right- score+10. Else- lose a life
 	{
 		for(int i=0; i<customers.length; i++)
 		{
@@ -591,7 +591,7 @@ public class CovidVendor extends JPanel {
 			}
 			
 		}
-		//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+		
 	}
 	
 }
