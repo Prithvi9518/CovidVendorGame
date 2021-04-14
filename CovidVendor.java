@@ -127,7 +127,7 @@ public class CovidVendor extends JPanel {
 		   }
 	   }
 	   
-	   if(gameTimeSeconds>16)
+	   if(gameTimeSeconds>19)
 	   {
 		   customersWalk(); //Customers walk one by one to collect their orders.
 
@@ -336,21 +336,30 @@ public class CovidVendor extends JPanel {
  //Drawing text that tells player what phase the level is on- ordering, food prep, serving, etc, with some walkthrough text(will add later)
    public void drawPhaseText(Graphics g)
    {
-	   if(gameTimeSeconds>1 && gameTimeSeconds<=8) //Order Phase
+	   if(gameTimeSeconds>1 && gameTimeSeconds<6) //Order Phase
 	   {
 		   g.setFont(new Font("TimesRoman", Font.PLAIN, 60));
 		   g.setColor(Color.RED);
 		   g.drawString("Order Phase!",300,100);
+		   
+		   g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+		   g.setColor(Color.BLACK);
+		   g.drawString("Memorize the customer orders from left to right",200,150);
+		   
 	   }
 	   
-	   if(gameTimeSeconds>8 && gameTimeSeconds<=15) //Food Prep Phase
+	   if(gameTimeSeconds>9 && gameTimeSeconds<=17) //Food Prep Phase
 	   {
 		   g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
 		   g.setColor(Color.RED);
 		   g.drawString("Food Preparation Phase!",250,100);
+		   
+		   g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+		   g.setColor(Color.BLACK);
+		   g.drawString("Press the green buttons in the same sequence as the customer orders",170,150);
 	   }
 	   
-	   if(gameTimeSeconds>15)
+	   if(gameTimeSeconds>17)
 	   {
 		   g.setFont(new Font("TimesRoman", Font.PLAIN, 60));
 		   g.setColor(Color.RED);
@@ -377,7 +386,8 @@ public class CovidVendor extends JPanel {
 	   for(int i=0; i<customers.length; i++)
 		{
 			customers[i] = new Customer((400 + 70*i), 617);
-			customers[i].randomizeOrderMask();
+			customers[i].randomizeOrder();
+			customers[i].randomizeMask();
 		}
    }
    
@@ -417,7 +427,7 @@ public class CovidVendor extends JPanel {
 				
 				if(gameState==1)
 				{
-					if(gameTimeSeconds>8 && gameTimeSeconds<15) //Checks for clicks on buttons between 8 and 15 secs into the level
+					if(gameTimeSeconds>9 && gameTimeSeconds<17) //Checks for clicks on buttons between 10 and 17 secs into the level
 					{
 
 						int buttonPressed = checkButton(me.getX(),me.getY());  //stores the button pressed on every click.
