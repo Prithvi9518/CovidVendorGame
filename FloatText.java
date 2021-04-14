@@ -50,20 +50,20 @@ public class FloatText {
 	}
 	
 	//Methods
-	public void update()
+	public void update(int x, int y)
 	{
 		posX+=speedX;
 		posY+=speedY;
 		
-		if(posX>=300 || posX<=600)
-		{
-			speedX = -speedX;
-		}
+		if(posX>=x+50 || posX<=x-50)
+		 {
+			 speedX = -speedX;
+		 }
 		 
-		if(posY>=820 || posY<=0)
-		{
-			speedY = -speedY;
-		}
+		 if(posY>=y || posY<=y-60)
+		 {
+			 speedY = -speedY;
+		 }
 	}
 	
 	
