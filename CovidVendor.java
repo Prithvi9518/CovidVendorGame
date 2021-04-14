@@ -41,6 +41,8 @@ public class CovidVendor extends JPanel {
 	
 	private boolean serveDialogueAppears = false; //Didn't get this feature to work yet.
 	
+	private FloatText wearAMask; //Test
+	
 
 	
 //Constructor
@@ -59,7 +61,7 @@ public class CovidVendor extends JPanel {
 		//Set up Array of customers and randomize their orders
 		setupCustomers();
 		
-		
+		wearAMask = new FloatText((int)customers[0].getPosX()-40,(int)customers[0].getPosY()-50,1,1); //Test
 		
 		//Set up array of buttons
 		setupButtons();
@@ -118,6 +120,7 @@ public class CovidVendor extends JPanel {
    {
 	   trackTime(); //Tracks time after player enters gameState = 1
 	   
+	   wearAMask.update((int)customers[0].getPosX(), (int)customers[0].getPosY()); //Test
 	   
 	   if(gameTimeSeconds>3)  //Setup for their order dialogues to appear after 3 secs, by setting the boolean ordered = true for every customer.
 	   {
@@ -152,6 +155,7 @@ public class CovidVendor extends JPanel {
 	   drawPhaseText(g);
 	   drawServeDialogue(g, serveDialogueAppears);
 	   drawScore(g);
+	   drawFloatText(g);
    }
    
    
@@ -376,7 +380,13 @@ public class CovidVendor extends JPanel {
 	   g.drawString("Score: "+player.getScore(),750,220);
    }
    
-   
+   //Drawing floating text
+   public void drawFloatText(Graphics g)
+   {
+	   String wearAMaskImgFilename = "wearAMask.png";
+	   ImageIcon wearAMaskImg = new ImageIcon(wearAMaskImgFilename);
+	   g.drawImage(wearAMaskImg.getImage(), wearAMask.getPosX(), wearAMask.getPosY(), null);
+   }
    
    
    
