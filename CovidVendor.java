@@ -43,6 +43,9 @@ public class CovidVendor extends JPanel {
 	
 	private FloatText[] floatTexts = new FloatText[2]; //Test
 	
+	private double orderStart=4, orderEnd=8, prepStart=10,prepEnd=18,serveStart=19, countdown; //Will use later to track time
+	
+	
 
 	
 //Constructor
@@ -98,9 +101,14 @@ public class CovidVendor extends JPanel {
 			drawElements(g);  
 			update();
 			
-			if(gameTimeSeconds>3 && gameTimeSeconds<=8) //Displays the customers' order dialogues for 4-5 secs
+			if(gameTimeSeconds>4 && gameTimeSeconds<=8) //Displays the customers' order dialogues for 4 secs
 			{
 				drawOrderDialogue(g);
+			}
+			
+			if(gameTimeSeconds>=10 && gameTimeSeconds<=18)
+			{
+				drawPrepTimer(g);
 			}
 			
 			
@@ -128,7 +136,7 @@ public class CovidVendor extends JPanel {
 		   floatTexts[i].update();
 	   }
 
-	   if(gameTimeSeconds>3)  //Setup for their order dialogues to appear after 3 secs, by setting the boolean ordered = true for every customer.
+	   if(gameTimeSeconds>5)  //Setup for their order dialogues to appear after 5 secs, by setting the boolean ordered = true for every customer.
 	   {
 		   for(int i=0; i<customers.length; i++)
 		   {
@@ -346,7 +354,7 @@ public class CovidVendor extends JPanel {
  //Drawing text that tells player what phase the level is on- ordering, food prep, serving, etc, with some walkthrough text(will add later)
    public void drawPhaseText(Graphics g)
    {
-	   if(gameTimeSeconds>1 && gameTimeSeconds<6) //Order Phase
+	   if(gameTimeSeconds>2 && gameTimeSeconds<6) //Order Phase
 	   {
 		   g.setFont(new Font("TimesRoman", Font.PLAIN, 60));
 		   g.setColor(Color.RED);
@@ -354,19 +362,19 @@ public class CovidVendor extends JPanel {
 		   
 		   g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
 		   g.setColor(Color.BLACK);
-		   g.drawString("Memorize the customer orders from left to right",200,150);
+		   g.drawString("Memorize the customer orders from left to right",205,150);
 		   
 	   }
 	   
-	   if(gameTimeSeconds>9 && gameTimeSeconds<=17) //Food Prep Phase
+	   if(gameTimeSeconds>9 && gameTimeSeconds<=14) //Food Prep Phase
 	   {
 		   g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
 		   g.setColor(Color.RED);
 		   g.drawString("Food Preparation Phase!",250,100);
 		   
-		   g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+		   g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		   g.setColor(Color.BLACK);
-		   g.drawString("Press the green buttons in the same sequence as the customer orders",100,150);
+		   g.drawString("Press the green buttons in the same sequence as the customer orders",200,150);
 	   }
 	   
 	   if(gameTimeSeconds>17)
@@ -395,23 +403,36 @@ public class CovidVendor extends JPanel {
    {
 	   for(int i=0; i<floatTexts.length; i++)
 	   {
-		   switch(i)
+		   if(floatTexts[i].isVisible())
 		   {
-			   case 0:
-				   String wearAMaskImgFilename = "wearAMask.png";
-				   ImageIcon wearAMaskImg = new ImageIcon(wearAMaskImgFilename);
-				   g.drawImage(wearAMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
-				   break;
-				   
-			   case 1:
-				   String pullUpMaskImgFilename = "pullUpMask.png";
-				   ImageIcon pullUpMaskImg = new ImageIcon(pullUpMaskImgFilename);
-				   g.drawImage(pullUpMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
-				   break;
+			   switch(i)
+			   {
+				   case 0:
+					   String wearAMaskImgFilename = "wearAMask.png";
+					   ImageIcon wearAMaskImg = new ImageIcon(wearAMaskImgFilename);
+					   g.drawImage(wearAMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
+					   break;
+
+				   case 1:
+					   String pullUpMaskImgFilename = "pullUpMask.png";
+					   ImageIcon pullUpMaskImg = new ImageIcon(pullUpMaskImgFilename);
+					   g.drawImage(pullUpMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
+					   break;
+			   }
 		   }
+		   
 	   }
 	   
    }
+   
+   
+   
+   public void drawPrepTimer(Graphics g)
+	{
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+		g.setColor(Color.BLACK);
+		g.drawString("Time Left: "+(int)countdown,400,450);
+	}
    
    
    
@@ -422,7 +443,7 @@ public class CovidVendor extends JPanel {
    {
 	   for(int i=0; i<customers.length; i++)
 		{
-			customers[i] = new Customer((400 + 70*i), 617);
+			customers[i] = new Customer((500 + 70*i), 617);
 			customers[i].randomizeOrder();
 			customers[i].randomizeMask();
 		}
@@ -470,7 +491,7 @@ public class CovidVendor extends JPanel {
 				
 				if(gameState==1)
 				{
-					if(gameTimeSeconds>9 && gameTimeSeconds<17) //Checks for clicks on buttons between 10 and 17 secs into the level
+					if(gameTimeSeconds>10 && gameTimeSeconds<18) //Checks for clicks on buttons between 10 and 18 secs into the level
 					{
 
 						int buttonPressed = checkButton(me.getX(),me.getY());  //stores the button pressed on every click.
@@ -536,6 +557,8 @@ public class CovidVendor extends JPanel {
 	{
 		Date currentTime = new Date(System.currentTimeMillis());
 		gameTimeSeconds = (currentTime.getTime()-startTime.getTime())/1000.0; 
+		
+		countdown = 18-gameTimeSeconds;
 	}
 	
 	
@@ -546,6 +569,11 @@ public class CovidVendor extends JPanel {
 	public void customersWalk() //Customers walk to get their food items.
 	{
 		   customers[0].setWalking(true); //Enable walk for first customer
+		   
+		   for(int j=0; j<floatTexts.length; j++)
+		   {
+			   floatTexts[j].setVisible(true);
+		   }
 		   
 	       for(int i=0; i<customers.length; i++) //Go through all the customers
 		   {

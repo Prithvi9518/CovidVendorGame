@@ -6,6 +6,7 @@ public class FloatText {
 	//Fields
 	private int posX, posY;
 	private double speedX, speedY;
+	private boolean visible;
 	
 	//Constructors
 	public FloatText(int posX, int posY, double speedX, double speedY) {
@@ -13,6 +14,7 @@ public class FloatText {
 		this.posY = posY;
 		this.speedX = speedX;
 		this.speedY = speedY;
+		visible = false;
 	}
 	
 	//Getters
@@ -31,6 +33,12 @@ public class FloatText {
 	public double getSpeedY() {
 		return speedY;
 	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+	
+	
 	
 	//Setters
 	public void setPosX(int posX) {
@@ -48,6 +56,12 @@ public class FloatText {
 	public void setSpeedY(double speedY) {
 		this.speedY = speedY;
 	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+	
+	
 	
 	//Methods
 	public void update()
