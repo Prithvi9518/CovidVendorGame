@@ -8,6 +8,8 @@ public class FloatText {
 	private double speedX, speedY;
 	private boolean visible;
 	
+	private boolean clicked;
+	
 	//Constructors
 	public FloatText(int posX, int posY, double speedX, double speedY) {
 		this.posX = posX;
@@ -15,6 +17,7 @@ public class FloatText {
 		this.speedX = speedX;
 		this.speedY = speedY;
 		visible = false;
+		clicked = false;
 	}
 	
 	//Getters
@@ -36,6 +39,10 @@ public class FloatText {
 
 	public boolean isVisible() {
 		return visible;
+	}
+	
+	public boolean isClicked() {
+		return clicked;
 	}
 	
 	
@@ -61,6 +68,9 @@ public class FloatText {
 		this.visible = visible;
 	}
 	
+	public void setClicked(boolean clicked) {
+		this.clicked = clicked;
+	}
 	
 	
 	//Methods
