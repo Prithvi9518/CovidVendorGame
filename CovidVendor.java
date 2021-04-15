@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -39,11 +38,10 @@ public class CovidVendor extends JPanel {
 	
 	private boolean served = false; //Checks if a customer has been served or not. The next customer doesn't move forward until player presses the Serve button.
 	
-	private boolean serveDialogueAppears = false; //Didn't get this feature to work yet.
-	
-	private FloatText[] floatTexts = new FloatText[2]; //Test
+	private FloatText[] floatTexts = new FloatText[2]; //Initializes floating texts
 	
 	private double orderStart=4, orderEnd=8, prepStart=10,prepEnd=18,serveStart=19, countdown; //Will use later to track time
+
 	
 	
 
@@ -106,13 +104,11 @@ public class CovidVendor extends JPanel {
 				drawOrderDialogue(g);
 			}
 			
-			if(gameTimeSeconds>=10 && gameTimeSeconds<=18)
+			if(gameTimeSeconds>=10 && gameTimeSeconds<=18) //Draws countdown timer for food prep phase 
 			{
 				drawPrepTimer(g);
 			}
 			
-			
-		
 		}
         
         //Paint the panel
@@ -147,8 +143,6 @@ public class CovidVendor extends JPanel {
 	   if(gameTimeSeconds>19)
 	   {
 		   customersWalk(); //Customers walk one by one to collect their orders.
-
-		   
 	   }
 	   
 	   
@@ -167,7 +161,6 @@ public class CovidVendor extends JPanel {
 	   drawButtons(g, buttons);
 	   drawLives(g);
 	   drawPhaseText(g);
-	   drawServeDialogue(g, serveDialogueAppears);
 	   drawScore(g);
 	   drawFloatText(g);
    }
@@ -269,19 +262,6 @@ public class CovidVendor extends JPanel {
 			   }
 		   }
 		   
-	   }
-	   
-   }
-   
-   
-   
-   public void drawServeDialogue(Graphics g, boolean serveDialogueAppears) //Doesn't work yet.
-   {	
-	   if(serveDialogueAppears)
-	   {
-		   String serveDialogueFilename = "serveDialogue.png";
-	       ImageIcon serveDialogueImg = new ImageIcon(serveDialogueFilename);
-	       g.drawImage(serveDialogueImg.getImage(), (int)player.getPosX()+7, (int)player.getPosY()-40, null);
 	   }
 	   
    }
@@ -403,7 +383,7 @@ public class CovidVendor extends JPanel {
    {
 	   for(int i=0; i<floatTexts.length; i++)
 	   {
-		   if(floatTexts[i].isVisible())
+		   if(floatTexts[i].isVisible() && floatTexts[i].isClicked() == false)
 		   {
 			   switch(i)
 			   {
@@ -426,7 +406,7 @@ public class CovidVendor extends JPanel {
    }
    
    
-   
+ //Drawing countdown timer for the food preparation phase
    public void drawPrepTimer(Graphics g)
 	{
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
@@ -518,6 +498,11 @@ public class CovidVendor extends JPanel {
 						
 					}
 					
+					if(gameTimeSeconds>19)
+					{
+						checkFloatTextPress(me.getX(),me.getY());
+					}
+					
 					if(barrierReached) //Checks for clicks on serve button when a customer reaches the food stall
 					{
 						checkServe(me.getX(),me.getY());
@@ -583,6 +568,11 @@ public class CovidVendor extends JPanel {
 			   {
 				   customers[i].setWalking(false); //Disable walking after they reach the barrier
 				   
+				    for(int j=0; j<floatTexts.length; j++)
+					{
+						floatTexts[j].setVisible(false);
+					}
+				   
 				   barrierReached = true; //Enables serve button press
 				   
 				   
@@ -599,6 +589,7 @@ public class CovidVendor extends JPanel {
 					   customers[i].setPosX(1000);
 					   customers[i].setPosY(1000); //sends customers off the map after they turn invisible
 				   }
+				   
 				  
 			   }
 			   
@@ -618,7 +609,7 @@ public class CovidVendor extends JPanel {
 	public void checkServe(int mouseX, int mouseY) //Called when a customer reaches the food stall, to check for clicks on Serve button
 	{
 		int buttonPressed = checkButton(mouseX,mouseY);
-						
+			
 		if(buttonPressed ==  3)
 		{
 			barrierReached = false; //Disables serve button press until next customer reaches barrier.
@@ -630,7 +621,7 @@ public class CovidVendor extends JPanel {
 			wait(2000);
 			
 			served = true; //Sets the next customer in motion only when player clicks on the Serve button
-		}
+		}		
 	}
 	
 	
@@ -678,7 +669,7 @@ public class CovidVendor extends JPanel {
 	
 	
 	
-	public void updateFloatTexts()
+	public void updateFloatTexts() //Causes bouncing of the float texts across the screen
 	{
 		for(int i=0; i<floatTexts.length; i++)
 	   {
@@ -686,4 +677,32 @@ public class CovidVendor extends JPanel {
 	   }
 	}
 	
+	
+	public void checkFloatTextPress(int mouseX, int mouseY)
+	{
+		for(int i=0; i<floatTexts.length; i++)
+		{
+			int xThreshold=0, yThreshold=0;
+			
+			switch(i)
+			{
+				case 0:
+					xThreshold = 270;
+					yThreshold = 24;
+					break;
+					
+				case 1:
+					xThreshold = 220;
+					yThreshold = 70;
+					break;
+					
+				default:
+					break;
+			}
+			if(mouseX>=floatTexts[i].getPosX() && mouseX<=floatTexts[i].getPosX()+xThreshold && mouseY>=floatTexts[i].getPosY() && mouseY<=floatTexts[i].getPosY()+yThreshold)
+			{
+				floatTexts[i].setClicked(true);
+			}
+		}
+	}
 }
