@@ -41,7 +41,7 @@ public class CovidVendor extends JPanel {
 	
 	private boolean serveDialogueAppears = false; //Didn't get this feature to work yet.
 	
-	private FloatText wearAMask; //Test
+	private FloatText[] floatTexts = new FloatText[2]; //Test
 	
 
 	
@@ -61,7 +61,10 @@ public class CovidVendor extends JPanel {
 		//Set up Array of customers and randomize their orders
 		setupCustomers();
 		
-		wearAMask = new FloatText((int)customers[0].getPosX()-40,(int)customers[0].getPosY()-50,1,1); //Test
+		for(int i=0; i<floatTexts.length; i++) //Test
+		{
+			floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
+		}
 		
 		//Set up array of buttons
 		setupButtons();
@@ -120,8 +123,11 @@ public class CovidVendor extends JPanel {
    {
 	   trackTime(); //Tracks time after player enters gameState = 1
 	   
-	   wearAMask.update((int)customers[0].getPosX(), (int)customers[0].getPosY()); //Test
-	   
+	   for(int i=0; i<floatTexts.length; i++)
+	   {
+		   floatTexts[i].update();
+	   }
+
 	   if(gameTimeSeconds>3)  //Setup for their order dialogues to appear after 3 secs, by setting the boolean ordered = true for every customer.
 	   {
 		   for(int i=0; i<customers.length; i++)
@@ -360,7 +366,7 @@ public class CovidVendor extends JPanel {
 		   
 		   g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
 		   g.setColor(Color.BLACK);
-		   g.drawString("Press the green buttons in the same sequence as the customer orders",170,150);
+		   g.drawString("Press the green buttons in the same sequence as the customer orders",100,150);
 	   }
 	   
 	   if(gameTimeSeconds>17)
@@ -380,13 +386,34 @@ public class CovidVendor extends JPanel {
 	   g.drawString("Score: "+player.getScore(),750,220);
    }
    
+   
+   
+   
+   
    //Drawing floating text
    public void drawFloatText(Graphics g)
    {
-	   String wearAMaskImgFilename = "wearAMask.png";
-	   ImageIcon wearAMaskImg = new ImageIcon(wearAMaskImgFilename);
-	   g.drawImage(wearAMaskImg.getImage(), wearAMask.getPosX(), wearAMask.getPosY(), null);
+	   for(int i=0; i<floatTexts.length; i++)
+	   {
+		   switch(i)
+		   {
+			   case 0:
+				   String wearAMaskImgFilename = "wearAMask.png";
+				   ImageIcon wearAMaskImg = new ImageIcon(wearAMaskImgFilename);
+				   g.drawImage(wearAMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
+				   break;
+				   
+			   case 1:
+				   String pullUpMaskImgFilename = "pullUpMask.png";
+				   ImageIcon pullUpMaskImg = new ImageIcon(pullUpMaskImgFilename);
+				   g.drawImage(pullUpMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
+				   break;
+		   }
+	   }
+	   
    }
+   
+   
    
    
    
