@@ -61,10 +61,8 @@ public class CovidVendor extends JPanel {
 		//Set up Array of customers and randomize their orders
 		setupCustomers();
 		
-		for(int i=0; i<floatTexts.length; i++) //Test
-		{
-			floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
-		}
+		//Sets up 2 floating texts
+		setupFloatTexts();
 		
 		//Set up array of buttons
 		setupButtons();
@@ -122,6 +120,8 @@ public class CovidVendor extends JPanel {
    public void update()
    {
 	   trackTime(); //Tracks time after player enters gameState = 1
+	   
+	   updateFloatTexts(); //Causes float texts to bounce. Check update method in FloatText class.
 	   
 	   for(int i=0; i<floatTexts.length; i++)
 	   {
@@ -442,7 +442,13 @@ public class CovidVendor extends JPanel {
 		}
    }
    
-   
+   public void setupFloatTexts()
+   {
+	   for(int i=0; i<floatTexts.length; i++) //Test
+		{
+			floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
+		}
+   }
    
    
    
@@ -639,6 +645,17 @@ public class CovidVendor extends JPanel {
 			
 		}
 		
+	}
+	
+	
+	
+	
+	public void updateFloatTexts()
+	{
+		for(int i=0; i<floatTexts.length; i++)
+	   {
+		   floatTexts[i].update();
+	   }
 	}
 	
 }
