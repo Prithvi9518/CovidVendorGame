@@ -25,6 +25,10 @@ public class Customer {
 		walking = false;
 		visible = true;
 	}
+
+	public Customer() {
+	}
+	
 	
 	//Getters
 	public double getPosX() {
