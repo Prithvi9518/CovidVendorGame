@@ -12,7 +12,9 @@ public class Customer {
 	private int dishNum; //1-Taco 2-Pizza 3-Burger
 	private boolean walking; //Controls when the customers start walking to pick up their food.
 	private boolean visible;
-	private int maskNum; //1- fully masked 2- mask under nose  3- no mask
+	private int maskNum; //1- fully masked 2- no mask  3- mask under nose
+	private boolean barrierReached;
+	private boolean served;
 	
 	private double speedX = 0.5; // walking speed
 
@@ -24,6 +26,8 @@ public class Customer {
 		ordered = false;
 		walking = false;
 		visible = true;
+		barrierReached = false;
+		served = false;
 	}
 
 	public Customer() {
@@ -59,6 +63,19 @@ public class Customer {
 	public int getMaskNum() {
 		return maskNum;
 	}
+
+	public boolean isBarrierReached() {
+		return barrierReached;
+	}
+
+	public boolean isServed() {
+		return served;
+	}
+
+	public double getSpeedX() {
+		return speedX;
+	}
+	
 	
 	
 	
@@ -93,6 +110,19 @@ public class Customer {
 	public void setMaskNum(int maskNum) {
 		this.maskNum = maskNum;
 	}
+
+	public void setBarrierReached(boolean barrierReached) {
+		this.barrierReached = barrierReached;
+	}
+
+	public void setServed(boolean served) {
+		this.served = served;
+	}
+
+	public void setSpeedX(double speedX) {
+		this.speedX = speedX;
+	}
+	
 	
 	
 	
@@ -117,7 +147,7 @@ public class Customer {
 	{
 		Random rand = new Random();
 		
-		maskNum = rand.nextInt(3) + 1; //1- fully masked 2- mask under nose  3- no mask
+		maskNum = rand.nextInt(3) + 1; //1- fully masked 2- no mask, 3- mask under nose
 	}
 	
 }
