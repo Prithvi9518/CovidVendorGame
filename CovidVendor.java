@@ -42,8 +42,7 @@ public class CovidVendor extends JPanel {
 	
 	private double orderStart=4, orderEnd=8, prepStart=10,prepEnd=18,serveStart=19, countdown; //Will use later to track time
 
-	
-	
+	private int floatTextPressed = -2;
 
 	
 //Constructor
@@ -197,14 +196,14 @@ public class CovidVendor extends JPanel {
                     g.drawImage(customerImg.getImage(),(int)customers[i].getPosX(),(int)customers[i].getPosY(),null);
                }
 
-               if(customers[i].getMaskNum()==2) //Not fully masked
+               if(customers[i].getMaskNum()==3) //Not fully masked
                {
                     String customerImgFilename = "human-undernose.png";
                     ImageIcon customerImg = new ImageIcon(customerImgFilename);
                     g.drawImage(customerImg.getImage(),(int)customers[i].getPosX(),(int)customers[i].getPosY(),null);
                }
 
-               if(customers[i].getMaskNum()==3) //No mask
+               if(customers[i].getMaskNum()==2) //No mask
                {
                     String customerImgFilename = "human-nomask.png";
                     ImageIcon customerImg = new ImageIcon(customerImgFilename);
@@ -500,7 +499,7 @@ public class CovidVendor extends JPanel {
 					
 					if(gameTimeSeconds>19)
 					{
-						checkFloatTextPress(me.getX(),me.getY());
+						floatTextPressed = checkFloatTextPress(me.getX(),me.getY());
 					}
 					
 					if(barrierReached) //Checks for clicks on serve button when a customer reaches the food stall
@@ -553,35 +552,30 @@ public class CovidVendor extends JPanel {
 	
 	public void customersWalk() //Customers walk to get their food items.
 	{
-		   customers[0].setWalking(true); //Enable walk for first customer
 		   
-		   for(int j=0; j<floatTexts.length; j++)
-		   {
-			   floatTexts[j].setVisible(true);
-		   }
+		   customers[0].setWalking(true); //Enable walk for first customer
+		   setFloatTextVisibility(true); //Makes floating texts visible
 		   
 	       for(int i=0; i<customers.length; i++) //Go through all the customers
 		   {
-			   customers[i].update(barrier); //Move customer until they reach the barrier
+			   if(floatTextPressed != 0 && floatTextPressed != 1) //Customer moves until either text is clicked.
+			   {
+				   customers[i].update(barrier); //Move customer until they reach the barrier
+			   }
 			   
-			   if(customers[i].getPosX() <= barrier)
+			   if(customers[i].getPosX() <= barrier) //Checks whether customer reached barrier or not
 			   {
 				   customers[i].setWalking(false); //Disable walking after they reach the barrier
 				   
-				    for(int j=0; j<floatTexts.length; j++)
-					{
-						floatTexts[j].setVisible(false);
-					}
+				   setFloatTextVisibility(false); //Floating texts disappear
 				   
 				   barrierReached = true; //Enables serve button press
-				   
-				   
-				   
 				   
 				   if(i != customers.length-1 && served == true)
 				   {   
 						customers[i+1].setWalking(true); //Enable walking for the next customer after pressing Serve
 				   }
+				  
 				  
 				   if(served == true) //Customer disappears after they get their food.
 				   {
@@ -589,7 +583,6 @@ public class CovidVendor extends JPanel {
 					   customers[i].setPosX(1000);
 					   customers[i].setPosY(1000); //sends customers off the map after they turn invisible
 				   }
-				   
 				  
 			   }
 			   
@@ -678,7 +671,7 @@ public class CovidVendor extends JPanel {
 	}
 	
 	
-	public void checkFloatTextPress(int mouseX, int mouseY)
+	public int checkFloatTextPress(int mouseX, int mouseY)
 	{
 		for(int i=0; i<floatTexts.length; i++)
 		{
@@ -702,6 +695,28 @@ public class CovidVendor extends JPanel {
 			if(mouseX>=floatTexts[i].getPosX() && mouseX<=floatTexts[i].getPosX()+xThreshold && mouseY>=floatTexts[i].getPosY() && mouseY<=floatTexts[i].getPosY()+yThreshold)
 			{
 				floatTexts[i].setClicked(true);
+				setFloatTextVisibility(false);
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
+	public void setFloatTextVisibility(boolean visible) //Controls visibility of float texts
+	{
+		if(visible)
+		{
+			 for(int j=0; j<floatTexts.length; j++)
+			 {
+				 floatTexts[j].setVisible(true);
+			 }
+		}
+		else
+		{
+			for(int j=0; j<floatTexts.length; j++) //Makes floating texts disappear after customer reaches barrier
+			{
+				floatTexts[j].setVisible(false);
 			}
 		}
 	}
