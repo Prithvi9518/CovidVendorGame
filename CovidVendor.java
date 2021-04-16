@@ -41,7 +41,7 @@ public class CovidVendor extends JPanel {
 	
 	private FloatText[] floatTexts = new FloatText[2]; //Initializes floating texts
 	
-	private double orderStart=4, orderEnd=8, prepStart=10,prepEnd=18,serveStart=19, countdown; //Will use later to track time
+	private double orderStart=4, orderEnd=10, prepStart=12,prepEnd=22,serveStart=23, countdown; //Will use later to track time
 
 	private int floatTextPressed = -2; //Used to check whether a floating text is clicked or not
 	
@@ -65,7 +65,7 @@ public class CovidVendor extends JPanel {
 		setupCustomers();
 		
 		//Sets up 2 floating texts
-//		setupFloatTexts();
+		setupFloatTexts();
 		
 		//Set up array of buttons
 		setupButtons();
@@ -126,14 +126,8 @@ public class CovidVendor extends JPanel {
    public void update()
    {
 	   trackTime(); //Tracks time after player enters gameState = 1
+	   updateFloatTexts(); //Causes float texts to bounce. Check update method in FloatText class.
 	   
-//	   updateFloatTexts(); //Causes float texts to bounce. Check update method in FloatText class.
-	   
-//	   for(int i=0; i<floatTexts.length; i++)
-//	   {
-//		   floatTexts[i].update();
-//	   }
-
 	   if(gameTimeSeconds>orderStart)  //Setup for their order dialogues to appear after 4 secs, by setting the boolean ordered = true for every customer.
 	   {
 		   for(int i=0; i<customers.length; i++)
@@ -164,8 +158,8 @@ public class CovidVendor extends JPanel {
 	   drawLives(g);
 	   drawPhaseText(g);
 	   drawScore(g);
-	   drawServeDialogue(g);
-//	   drawFloatText(g);
+//	   drawServeDialogue(g);
+	   drawFloatText(g);
    }
    
    
@@ -387,31 +381,31 @@ public class CovidVendor extends JPanel {
    
    
    //Drawing floating text
-//   public void drawFloatText(Graphics g)
-//   {
-//	   for(int i=0; i<floatTexts.length; i++)
-//	   {
-//		   if(floatTexts[i].isVisible() && floatTexts[i].isClicked() == false)
-//		   {
-//			   switch(i)
-//			   {
-//				   case 0:
-//					   String wearAMaskImgFilename = "wearAMask.png";
-//					   ImageIcon wearAMaskImg = new ImageIcon(wearAMaskImgFilename);
-//					   g.drawImage(wearAMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
-//					   break;
-//
-//				   case 1:
-//					   String pullUpMaskImgFilename = "pullUpMask.png";
-//					   ImageIcon pullUpMaskImg = new ImageIcon(pullUpMaskImgFilename);
-//					   g.drawImage(pullUpMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
-//					   break;
-//			   }
-//		   }
-//		   
-//	   }
-//	   
-//   }
+   public void drawFloatText(Graphics g)
+   {
+	   for(int i=0; i<floatTexts.length; i++)
+	   {
+		   if(floatTexts[i].isVisible() && floatTexts[i].isClicked() == false)
+		   {
+			   switch(i)
+			   {
+				   case 0:
+					   String wearAMaskImgFilename = "wearAMask.png";
+					   ImageIcon wearAMaskImg = new ImageIcon(wearAMaskImgFilename);
+					   g.drawImage(wearAMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
+					   break;
+
+				   case 1:
+					   String pullUpMaskImgFilename = "pullUpMask.png";
+					   ImageIcon pullUpMaskImg = new ImageIcon(pullUpMaskImgFilename);
+					   g.drawImage(pullUpMaskImg.getImage(), floatTexts[i].getPosX(), floatTexts[i].getPosY(), null);
+					   break;
+			   }
+		   }
+		   
+	   }
+	   
+   }
    
    
  //Drawing countdown timer for the food preparation phase
@@ -422,18 +416,21 @@ public class CovidVendor extends JPanel {
 		g.drawString("Time Left: "+(int)countdown,400,450);
 	}
    
-   public void drawServeDialogue(Graphics g)
-   {
-	   for(int i=0; i<customers.length; i++)
-	   {
-		   if(customers[i].isServed())
-		   {
-			   String serveDialogueFilename = "serveDialogue.png";
-			   ImageIcon serveDialogueImg = new ImageIcon(serveDialogueFilename);
-			   g.drawImage(serveDialogueImg.getImage(),(int)player.getPosX()+7,(int)player.getPosY()-40,null);
-		   }
-	   }
-   }
+   
+   
+   
+//   public void drawServeDialogue(Graphics g) //Doesn't work
+//   {
+//	   for(int i=0; i<customers.length; i++)
+//	   {
+//		   if(customers[i].isServed())
+//		   {
+//			   String serveDialogueFilename = "serveDialogue.png";
+//			   ImageIcon serveDialogueImg = new ImageIcon(serveDialogueFilename);
+//			   g.drawImage(serveDialogueImg.getImage(),(int)player.getPosX()+7,(int)player.getPosY()-40,null);
+//		   }
+//	   }
+//   }
    
    
    
@@ -462,13 +459,13 @@ public class CovidVendor extends JPanel {
 		}
    }
    
-//   public void setupFloatTexts()
-//   {
-//	   for(int i=0; i<floatTexts.length; i++) //Test
-//		{
-////		floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
-//		}
-//   }
+   public void setupFloatTexts() //Sets up floating texts
+   {
+	   for(int i=0; i<floatTexts.length; i++)
+	   {
+			floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
+	   }
+   }
    
    
    
@@ -519,6 +516,7 @@ public class CovidVendor extends JPanel {
 					else if(servePhase)
 					{
 						checkServePressed(me.getX(),me.getY());
+						checkFloatTextPressed(me.getX(),me.getY());
 					}
 					
 					
@@ -562,7 +560,7 @@ public class CovidVendor extends JPanel {
 	
 	
 	
-	public void trackTime() //Tracks the time since gameState 1 is active
+	public void trackTime() //Tracks the time and phases since gameState 1 is active
 	{
 		Date currentTime = new Date(System.currentTimeMillis());
 		gameTimeSeconds = (currentTime.getTime()-startTime.getTime())/1000.0; 
@@ -595,7 +593,7 @@ public class CovidVendor extends JPanel {
 		}
 		
 		
-		countdown = 18-gameTimeSeconds; //Countdown timer for food preparation phase
+		countdown = prepEnd-gameTimeSeconds; //Countdown timer for food preparation phase
 	}
 	
 	
@@ -653,20 +651,27 @@ public class CovidVendor extends JPanel {
 //		   }
 //	}
 	
-	public void customersWalk()
+	public void customersWalk() //Makes customers move towards the food truck one by one
 	{
 		//First, enable the first customer to walk.
 		customers[0].setWalking(true);
 		
 		for(int i=0; i<customers.length; i++)
 		{
+			if(customers[i].isWalking())
+			{
+				setFloatTextVisibility(true); //Makes floating texts visible whenever a customer is walking.
+			}
+			
+			
 			//Make customers walk till the barrier point, if their boolean walking is set to true
 			customers[i].update(barrier);
 			
 			if(customers[i].getPosX()<=barrier)
 			{
+				setFloatTextVisibility(false); //Turns off visibility once they reach the barrier
+				
 				customers[i].setWalking(false); //Stops the customer when they reach the barrier point.
-//				barrierReached = true; //Used to check for clicks on serve button only when a customer is at barrier point
 				customers[i].setBarrierReached(true);
 			}
 		}
@@ -694,7 +699,7 @@ public class CovidVendor extends JPanel {
 //		}		
 //	}
 	
-	public void checkServePressed(int mouseX, int mouseY)
+	public void checkServePressed(int mouseX, int mouseY) //Responsible for checking whether serve button is pressed or not
 	{
 		for(int i=0; i<customers.length; i++)
 		{
@@ -705,9 +710,8 @@ public class CovidVendor extends JPanel {
 				if(buttonPressed == 3) //Only checks for clicks on serve button
 				{
 					customers[i].setServed(true);
-//					wait(2000);
-//					customers[i].setServed(false);
-					moveAwayCustomer(i); //moves customer off map and makes them invisible
+					wait(750); //Delay of 750 millisecs
+					validateOrders(); //Changes score and lives depending on whether player gets the orders right				
 				}
 			}
 		}
@@ -757,14 +761,37 @@ public class CovidVendor extends JPanel {
 	
 	
 	
+	public void validateOrders() //If order right- score+10, else lives-1
+	{
+		for(int i=0; i<customers.length; i++)
+		{
+			if(customers[i].isServed() && customers[i].getPosX()<=barrier)
+			{
+				if(player.getOrderCheck(i)) //Checks the boolean array that stored whether the player pressed the right food buttons in the preparation phase
+				{
+					player.increaseScore(10);
+				}
+				else
+				{
+					player.loseLife();
+				}
+				
+				customers[i].setServed(false);
+				moveAwayCustomer(i); //moves customer off map and makes them invisible
+
+			}
+		}
+	}
 	
-//	public void updateFloatTexts() //Causes bouncing of the float texts across the screen
-//	{
-//		for(int i=0; i<floatTexts.length; i++)
-//	   {
-//		   floatTexts[i].update();
-//	   }
-//	}
+	
+	
+	public void updateFloatTexts() //Causes bouncing of the float texts across the screen
+	{
+		for(int i=0; i<floatTexts.length; i++)
+	   {
+		   floatTexts[i].update();
+	   }
+	}
 	
 	
 //	public void checkFloatTextPress(int mouseX, int mouseY) //Checks if a floating text is pressed or not
@@ -797,23 +824,53 @@ public class CovidVendor extends JPanel {
 //		
 //	}
 //	
-//	public void setFloatTextVisibility(boolean visible) //Controls visibility of float texts
-//	{
-//		if(visible)
-//		{
-//			 for(int j=0; j<floatTexts.length; j++)
-//			 {
-//				 floatTexts[j].setVisible(true);
-//			 }
-//		}
-//		else
-//		{
-//			for(int j=0; j<floatTexts.length; j++) //Makes floating texts disappear after customer reaches barrier
-//			{
-//				floatTexts[j].setVisible(false);
-//			}
-//		}
-//	}
+	public void checkFloatTextPressed(int mouseX, int mouseY)
+	{
+		for(int i=0; i<customers.length; i++)
+		{
+			if(customers[i].isWalking()) //Checks for clicks only if a customer is walking
+			{
+				int pressedText = getFloatTextIndex(mouseX, mouseY);
+				
+				if(pressedText + 2 == customers[i].getMaskNum())
+				{
+					customers[i].setWalking(false);
+					wait(1250);
+					customers[i].setMaskNum(1);
+					customers[i].setWalking(true);
+				}
+				else if(pressedText != -1)
+				{
+					customers[i].setWalking(false);
+					wait(1250);
+					player.loseLife();
+					customers[i].setWalking(true);
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	public void setFloatTextVisibility(boolean visible) //Controls visibility of float texts
+	{
+		if(visible)
+		{
+			 for(int j=0; j<floatTexts.length; j++)
+			 {
+				 floatTexts[j].setVisible(true);
+			 }
+		}
+		else
+		{
+			for(int j=0; j<floatTexts.length; j++) //Makes floating texts disappear after customer reaches barrier
+			{
+				floatTexts[j].setVisible(false);
+			}
+		}
+	}
 //	
 //	public void validateFloatTextPress() //Checks if right floating text is pressed
 //	{
@@ -856,7 +913,7 @@ public class CovidVendor extends JPanel {
 //		
 //	}
 	
-	public void moveAwayCustomer(int i)
+	public void moveAwayCustomer(int i) //Moves customer off the map and enables walking for the next customer
 	{
 		customers[i].setVisible(false);
 		customers[i].setPosX(10000);
@@ -868,5 +925,38 @@ public class CovidVendor extends JPanel {
 		}
 	}
 	
+	
+	public int getFloatTextIndex(int mouseX, int mouseY)
+	{
+		int xThreshold, yThreshold, index=-1;
+		
+		for(int i=0; i<floatTexts.length; i++)
+		{
+			switch(i) //Needed different x and y thresholds due to different image sizes
+			{
+				case 0:
+					xThreshold = 270;
+					yThreshold = 24;
+					break;
+					
+				case 1:
+					xThreshold = 220;
+					yThreshold = 70;
+					break;
+					
+				default:
+					xThreshold = 0;
+					yThreshold = 0;
+					break;
+			}
+			if(mouseX>=floatTexts[i].getPosX() && mouseX<=floatTexts[i].getPosX()+xThreshold && mouseY>=floatTexts[i].getPosY() && mouseY<=floatTexts[i].getPosY()+yThreshold)
+			{
+				setFloatTextVisibility(false); //If either one of them is clicked, both turn invisible
+				index = i;
+			}
+		}
+		
+		return index;
+	}
 	
 }
