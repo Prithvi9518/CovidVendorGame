@@ -4,6 +4,7 @@ package Programming_Project;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Window;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -12,6 +13,8 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import java.util.Timer;
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 
 //Have to clean up the code and segregate it into various functions later. 
@@ -41,13 +44,15 @@ public class CovidVendor extends JPanel {
 	
 	private FloatText[] floatTexts = new FloatText[2]; //Initializes floating texts
 	
-	private double orderStart=4, orderEnd=10, prepStart=12,prepEnd=22,serveStart=23, countdown; //Will use later to track time
+	private double orderStart=4, orderEnd=10, prepStart=12,prepEnd=22,serveStart=23, countdown;//To set when each phase starts and ends
 
 	private int floatTextPressed = -2; //Used to check whether a floating text is clicked or not
 	
-	private boolean orderPhase = false, prepPhase = false, servePhase = false;
+	private boolean orderPhase = false, prepPhase = false, servePhase = false; //To track phases
 	
-	private UIButton playButton = new UIButton(260,270), exitButton = new UIButton(320,470);
+	private UIButton playButton = new UIButton(260,270), exitButton = new UIButton(320,470); //Buttons on the start menu
+	
+	private UIButton replayButton = new UIButton(270,450);
 
 	
 //Constructor
@@ -114,11 +119,11 @@ public class CovidVendor extends JPanel {
 			}
 			
 		}
-		else if(gameState == -1)
+		else if(gameState == -1) //Made it through the level
 		{
 			drawMadeIt(g);
 		}
-		else if(gameState == -2)
+		else if(gameState == -2) //Lost the level
 		{
 			drawGameOver(g);
 		}
@@ -149,8 +154,8 @@ public class CovidVendor extends JPanel {
 	   if(servePhase)
 	   {
 		   customersWalk(); //Customers walk one by one to collect their orders.
-		   checkGameOver();
-		   checkMadeIt();
+		   checkGameOver(); //Checks for game over(if lives <=0 or if score = 0)
+		   checkMadeIt(); //Checks for win (if lives != 0 and score > 0)
 	   }
 	   
 	   
@@ -170,7 +175,7 @@ public class CovidVendor extends JPanel {
 	   drawLives(g);
 	   drawPhaseText(g);
 	   drawScore(g);
-//	   drawServeDialogue(g);
+//	   drawServeDialogue(g); doesn't work
 	   drawFloatText(g);
    }
    
@@ -238,27 +243,34 @@ public class CovidVendor extends JPanel {
 //       ImageIcon startMenuImg = new ImageIcon(startMenuFilename); 
 //	   g.drawImage(startMenuImg.getImage(), 0 ,0 , null); 
 	   
+	   //Play Button
 	   String playButtonFilename = "playButton.png";
 	   ImageIcon playButtonImg = new ImageIcon(playButtonFilename);
 	   g.drawImage(playButtonImg.getImage(),(int)playButton.getPosX(),(int)playButton.getPosY(),null);
 	   
+	   //Exit Button
 	   String exitButtonFilename = "exitButton.png";
 	   ImageIcon exitButtonImg = new ImageIcon(exitButtonFilename);
 	   g.drawImage(exitButtonImg.getImage(),(int)exitButton.getPosX(),(int)exitButton.getPosY(),null);
    }
    
  //Drawing game over screen
-   public void drawGameOver(Graphics g)
+   public void drawGameOver(Graphics g) //Game over screen
    {
 	   g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
 	   g.setColor(Color.RED);
-	   g.drawString("You Lose!",200,400);
-	   g.drawString("Try and get a score more than 0",200,550);
-	   g.drawString("without losing all your lives!",200, 600);
+	   g.drawString("You Lose!",390,200);
+	   g.drawString("Try and get a score more than 0",180,350);
+	   g.drawString("without losing all your lives!",180, 400);
+	   
+	   String replayButtonFilename = "replayButton.png";
+	   ImageIcon replayButtonImg = new ImageIcon(replayButtonFilename);
+	   g.drawImage(replayButtonImg.getImage(),(int)replayButton.getPosX(),(int)replayButton.getPosY(),null);
+	   
    }
    
  //Drawing win screen
-   public void drawMadeIt(Graphics g)
+   public void drawMadeIt(Graphics g) //Winnning screen
    {
 	    g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
 		g.setColor(Color.WHITE);
@@ -394,7 +406,7 @@ public class CovidVendor extends JPanel {
 		   g.drawString("Press the green buttons in the same sequence as the customer orders",200,150);
 	   }
 	   
-	   if(gameTimeSeconds>serveStart-2)
+	   if(gameTimeSeconds>serveStart-2) //Serve Phase
 	   {
 		   g.setFont(new Font("TimesRoman", Font.PLAIN, 60));
 		   g.setColor(Color.RED);
@@ -420,7 +432,7 @@ public class CovidVendor extends JPanel {
    {
 	   for(int i=0; i<floatTexts.length; i++)
 	   {
-		   if(floatTexts[i].isVisible() && floatTexts[i].isClicked() == false)
+		   if(floatTexts[i].isVisible() && floatTexts[i].isClicked() == false) //Turns invisible if clicked
 		   {
 			   switch(i)
 			   {
@@ -469,7 +481,7 @@ public class CovidVendor extends JPanel {
    
    
    
-//Setting up array of customers and randomizing their orders and the way they put on their mask. See randomizeOrder method in Customer class.
+//Setting up array of customers and randomizing their orders and the way they put on their mask. See randomizeOrder & randomizeMask methods in Customer class.
    public void setupCustomers()
    {
 	   for(int i=0; i<customers.length; i++)
@@ -498,9 +510,9 @@ public class CovidVendor extends JPanel {
    {
 	   for(int i=0; i<floatTexts.length; i++)
 	   {
-//			floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
+			floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
 			//Debugging
-			floatTexts[i] = new FloatText(300-(100*i), 300 - (100*i), 0 , 0);
+//			floatTexts[i] = new FloatText(300-(100*i), 300 - (100*i), 0 , 0);
 	   }
    }
    
@@ -514,9 +526,9 @@ public class CovidVendor extends JPanel {
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent me) { //Method is called every click
 				
-				if(gameState==0)
+				if(gameState==0) //Start Menu
 				{
-					checkMenuButtonPress(me.getX(), me.getY());
+					checkMenuButtonPress(me.getX(), me.getY(), me); //Checks for clicks on play and exit buttons
 				}
 				
 				
@@ -550,9 +562,14 @@ public class CovidVendor extends JPanel {
 					}
 					else if(servePhase)
 					{
-						checkServePressed(me.getX(),me.getY());
-						checkFloatTextPressed(me.getX(),me.getY());
+						checkServePressed(me.getX(),me.getY()); //Checks for clicks on serve button
+						checkFloatTextPressed(me.getX(),me.getY()); //Checks for clicks on floating texts
 					}
+				}
+				
+				if(gameState == -2) //Game Over
+				{
+					checkReplay(me.getX(), me.getY());
 				}
 				 
 			}
@@ -635,11 +652,7 @@ public class CovidVendor extends JPanel {
 			{
 				setFloatTextVisibility(true); //Makes floating texts visible whenever a customer is walking.
 			}
-//			else
-//			{
-//				setFloatTextVisibility(false);
-//			}
-			
+
 			
 			//Make customers walk till the barrier point, if their boolean walking is set to true
 			customers[i].update(barrier);
@@ -649,7 +662,7 @@ public class CovidVendor extends JPanel {
 				setFloatTextVisibility(false); //Turns off visibility once they reach the barrier
 				
 				customers[i].setWalking(false); //Stops the customer when they reach the barrier point.
-				customers[i].setBarrierReached(true);
+				customers[i].setBarrierReached(true); //Used in checkServePressed() method
 			}
 		}
 	}
@@ -665,7 +678,7 @@ public class CovidVendor extends JPanel {
 		{
 			if(customers[i].isBarrierReached()) //Checks only when a customer is near the barrier
 			{
-				int buttonPressed = checkButton(mouseX, mouseY);
+				int buttonPressed = checkButton(mouseX, mouseY); //Stores index of button pressed 
 				
 				if(buttonPressed == 3) //Only checks for clicks on serve button
 				{
@@ -722,7 +735,7 @@ public class CovidVendor extends JPanel {
 	
 	
 	
-	public void updateFloatTexts() //Causes bouncing of the float texts across the screen
+	public void updateFloatTexts() //Causes bouncing of the float texts across the screen. See update method in FloatText class
 	{
 		for(int i=0; i<floatTexts.length; i++)
 	   {
@@ -744,7 +757,7 @@ public class CovidVendor extends JPanel {
 				setFloatTextVisibility(false); //If either one of them is clicked, both turn invisible
 
 				
-				if(pressedText != -1) //debug
+				if(pressedText != -1) //debug purposes
 				{
 					System.out.println(pressedText);
 				}
@@ -752,16 +765,16 @@ public class CovidVendor extends JPanel {
 				
 				if(pressedText != -1 && customers[i].getPosX()>barrier)
 				{
-					if(pressedText + 2 == customers[i].getMaskNum())
+					if(pressedText + 2 == customers[i].getMaskNum()) //Stops customer, changes their image to fully masked, resumes their walk
 					{
 						customers[i].setWalking(false);
 						wait(1250);
-						customers[i].setMaskNum(1);
+						customers[i].setMaskNum(1); 
 						customers[i].setWalking(true);
 					}
-					else
+					else //Stops customer and just resumes their walk, subtracts player life
 					{
-						System.out.println("Hi"); //debug
+						System.out.println("Hi"); //debug purposes
 						customers[i].setWalking(false);
 						player.loseLife();
 						wait(1250);
@@ -808,16 +821,16 @@ public class CovidVendor extends JPanel {
 		if(i != customers.length-1)
 		{
 			customers[i+1].setWalking(true);
-			setFloatTextVisibility(true);
-			for(int j=0; j<floatTexts.length; j++)
+			setFloatTextVisibility(true); //Makes floating texts reappear for the next customer's walk
+			for(int j=0; j<floatTexts.length; j++) //^^^
 			{
-				floatTexts[j].setClicked(false);
+				floatTexts[j].setClicked(false); 
 			}
 		}
 	}
 	
 	
-	public int getFloatTextIndex(int mouseX, int mouseY)
+	public int getFloatTextIndex(int mouseX, int mouseY) //Stores index of float text clicked
 	{
 		int xThreshold=0, yThreshold=0, index=-1;
 		
@@ -885,36 +898,52 @@ public class CovidVendor extends JPanel {
 			
 			if(count == customers.length && player.getScore() <=0)
 			{
-				gameState = -2;
+				gameState = -2; //game over screen
 			}
 		}
 	}
 	
 	public void checkMadeIt()
 	{
-		if(customers[customers.length-1].isVisible() == false)
+		if(customers[customers.length-1].isVisible() == false) //If the last customer disappears, check player score and lives
 		{
 			if(player.getScore()>0 && player.getLives()>0)
 			{
-				gameState = -1;
+				gameState = -1; //winning screen
 			}
 		}
 	}
 	
 	
 	
-	public void checkMenuButtonPress(int mouseX, int mouseY)
+	public void checkMenuButtonPress(int mouseX, int mouseY, MouseEvent me)
 	{
-		if(mouseX>=playButton.getPosX() && mouseX<=playButton.getPosX()+512 && mouseY>=playButton.getPosY() && mouseY<=playButton.getPosY()+223)
+		if(mouseX>=playButton.getPosX() && mouseX<=playButton.getPosX()+472 && mouseY>=playButton.getPosY() && mouseY<=playButton.getPosY()+168) //Play Button check
 		{
-			gameState = 1;
+			gameState = 1; //Takes you to game
 			startTime = new Date(System.currentTimeMillis());
-			customerIndex = 0; //To check if the first button click matches with the first customer's order. See below for more details
+			customerIndex = 0; //To check if the first button click matches with the first customer's order
 		}
-		else if(mouseX>=exitButton.getPosX() && mouseX<=exitButton.getPosX()+350 && mouseY>=exitButton.getPosY() && mouseY<=exitButton.getPosY()+150)
+		else if(mouseX>=exitButton.getPosX() && mouseX<=exitButton.getPosX()+330 && mouseY>=exitButton.getPosY() && mouseY<=exitButton.getPosY()+132) //Exit Button Check
 		{
-			System.exit(0);
+			JComponent comp = (JComponent) me.getSource();
+			Window win = SwingUtilities.getWindowAncestor(comp);
+			win.dispose();
 		}
 	}
+	
+	
+	
+	
+//	public void checkReplay(int mouseX, int mouseY) Doesn't work yet
+//	{
+//		if(mouseX>=replayButton.getPosX() && mouseX<=replayButton.getPosX()+420 && mouseY>=replayButton.getPosY() && mouseY<=replayButton.getPosY()+140) //replay Button check
+//		{
+//			gameState = 1;
+//			startTime = new Date(System.currentTimeMillis());
+//			customerIndex = 0;
+//			
+//		}
+//	}
 	
 }
