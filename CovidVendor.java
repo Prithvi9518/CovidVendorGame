@@ -112,6 +112,10 @@ public class CovidVendor extends JPanel {
 			}
 			
 		}
+		else if(gameState == -2)
+		{
+			drawGameOver(g);
+		}
         
         //Paint the panel
         repaint();
@@ -139,6 +143,7 @@ public class CovidVendor extends JPanel {
 	   if(servePhase)
 	   {
 		   customersWalk(); //Customers walk one by one to collect their orders.
+		   checkGameOver();
 	   }
 	   
 	   
@@ -227,7 +232,15 @@ public class CovidVendor extends JPanel {
 	   g.drawImage(startMenuImg.getImage(), 0 ,0 , null); 
    }
    
-   
+ //Drawing game over screen
+   public void drawGameOver(Graphics g)
+   {
+	   g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+	   g.setColor(Color.RED);
+	   g.drawString("You Lose!",200,400);
+	   g.drawString("Try and get a score more than 0",200,550);
+	   g.drawString("without losing all your lives!",200, 600);
+   }
    
  
    
@@ -463,7 +476,9 @@ public class CovidVendor extends JPanel {
    {
 	   for(int i=0; i<floatTexts.length; i++)
 	   {
-			floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
+//			floatTexts[i] = new FloatText(250 - (30*i), 250 - (50*i), 1+i, 1+i);
+			//Debugging
+			floatTexts[i] = new FloatText(300-(100*i), 300 - (100*i), 0 , 0);
 	   }
    }
    
@@ -518,19 +533,6 @@ public class CovidVendor extends JPanel {
 						checkServePressed(me.getX(),me.getY());
 						checkFloatTextPressed(me.getX(),me.getY());
 					}
-					
-					
-//					else if(gameTimeSeconds>19)
-//					{
-//						checkFloatTextPress(me.getX(),me.getY());
-//					}
-//					
-//					if(barrierReached) //Checks for clicks on serve button when a customer reaches the food stall
-//					{
-//						checkServe(me.getX(),me.getY());
-//					}
-					
-					
 				}
 				 
 			}
@@ -600,56 +602,7 @@ public class CovidVendor extends JPanel {
 	
 	
 	
-	
-//	public void customersWalk() //Customers walk to get their food items.
-//	{
-//		   
-//		   customers[0].setWalking(true); //Enable walk for first customer
-//		   setFloatTextVisibility(true); //Makes floating texts visible
-//		   
-//	       for(int i=0; i<customers.length; i++) //Go through all the customers
-//		   {
-//			   if(floatTexts[0].isClicked()== false && floatTexts[1].isClicked() == false) //Customer moves until either text is clicked.
-//			   {
-//				   customers[i].update(barrier); //Move customer until they reach the barrier
-//			   }
-//			   else
-//			   {
-//				   setFloatTextVisibility(false);
-//				   validateFloatTextPress(); //Checks which float text was pressed
-//			   }
-//			   
-//			   if(customers[i].getPosX() <= barrier) //Checks whether customer reached barrier or not
-//			   {
-//				   customers[i].setWalking(false); //Disable walking after they reach the barrier
-//				   
-//				   setFloatTextVisibility(false); //Floating texts disappear
-//				   
-//				   barrierReached = true; //Enables serve button press
-//				   
-//				   if(i != customers.length-1 && served == true)
-//				   {   
-//						customers[i+1].setWalking(true); //Enable walking for the next customer after pressing Serve
-//				   }
-//				  
-//				  
-//				   if(served == true) //Customer disappears after they get their food.
-//				   {
-//					   customers[i].setVisible(false);
-//					   customers[i].setPosX(1000);
-//					   customers[i].setPosY(1000); //sends customers off the map after they turn invisible
-//				   }
-//				  
-//			   }
-//			   
-//			   if(i == customers.length-1) //I still don't know why this works
-//			   {
-//				   served = false;
-//			   }
-//			   
-//			   
-//		   }
-//	}
+
 	
 	public void customersWalk() //Makes customers move towards the food truck one by one
 	{
@@ -662,6 +615,10 @@ public class CovidVendor extends JPanel {
 			{
 				setFloatTextVisibility(true); //Makes floating texts visible whenever a customer is walking.
 			}
+//			else
+//			{
+//				setFloatTextVisibility(false);
+//			}
 			
 			
 			//Make customers walk till the barrier point, if their boolean walking is set to true
@@ -680,24 +637,7 @@ public class CovidVendor extends JPanel {
 	
 	
 	
-	
-//	public void checkServe(int mouseX, int mouseY) //Called when a customer reaches the food stall, to check for clicks on Serve button
-//	{
-//		int buttonPressed = checkButton(mouseX,mouseY);
-//			
-//		if(buttonPressed ==  3)
-//		{
-//			barrierReached = false; //Disables serve button press until next customer reaches barrier.
-//			
-//			System.out.println("Here you go");
-//			
-//			checkOrders(); //Checks whether player got order right or not
-//			
-//			wait(2000); //2 secs delay
-//			
-//			served = true; //Sets the next customer in motion only when player clicks on the Serve button
-//		}		
-//	}
+
 	
 	public void checkServePressed(int mouseX, int mouseY) //Responsible for checking whether serve button is pressed or not
 	{
@@ -733,31 +673,8 @@ public class CovidVendor extends JPanel {
 		}
 	}
 	
-   
+  
 	
-	
-	
-	
-//	public void checkOrders() //If player gets order right- score+10. Else- lose a life
-//	{
-//		for(int i=0; i<customers.length; i++)
-//		{
-//			if(customers[i].getPosX() == barrier)
-//			{
-//				if(player.getOrderCheck(i))
-//				{
-//					player.increaseScore(10);
-//				}
-//				else
-//				{
-//					player.loseLife();
-//				}
-//				
-//			}
-//			
-//		}
-//		
-//	}
 	
 	
 	
@@ -765,10 +682,10 @@ public class CovidVendor extends JPanel {
 	{
 		for(int i=0; i<customers.length; i++)
 		{
-			if(customers[i].isServed() && customers[i].getPosX()<=barrier)
+			if(customers[i].isServed() && customers[i].getPosX()==barrier)
 			{
-				if(player.getOrderCheck(i)) //Checks the boolean array that stored whether the player pressed the right food buttons in the preparation phase
-				{
+				if(player.getOrderCheck(i) && customers[i].getMaskNum() == 1) //Checks the boolean array that stored whether the player pressed 
+				{															  //the right food buttons in the preparation phase, and if the customer has a mask on
 					player.increaseScore(10);
 				}
 				else
@@ -793,59 +710,45 @@ public class CovidVendor extends JPanel {
 	   }
 	}
 	
+
 	
-//	public void checkFloatTextPress(int mouseX, int mouseY) //Checks if a floating text is pressed or not
-//	{
-//		for(int i=0; i<floatTexts.length; i++)
-//		{
-//			int xThreshold=0, yThreshold=0;
-//			
-//			switch(i) //Needed different x and y thresholds due to different image sizes
-//			{
-//				case 0:
-//					xThreshold = 270;
-//					yThreshold = 24;
-//					break;
-//					
-//				case 1:
-//					xThreshold = 220;
-//					yThreshold = 70;
-//					break;
-//					
-//				default:
-//					break;
-//			}
-//			if(mouseX>=floatTexts[i].getPosX() && mouseX<=floatTexts[i].getPosX()+xThreshold && mouseY>=floatTexts[i].getPosY() && mouseY<=floatTexts[i].getPosY()+yThreshold)
-//			{
-//				floatTexts[i].setClicked(true);
-//				setFloatTextVisibility(false);
-//			}
-//		}
-//		
-//	}
-//	
+	
+	
 	public void checkFloatTextPressed(int mouseX, int mouseY)
 	{
 		for(int i=0; i<customers.length; i++)
 		{
-			if(customers[i].isWalking()) //Checks for clicks only if a customer is walking
+			if(customers[i].isBarrierReached() == false && customers[i].isWalking()) //Checks for clicks only if a customer is walking, and hasn't reached the barrier yet
 			{
 				int pressedText = getFloatTextIndex(mouseX, mouseY);
+				setFloatTextVisibility(false); //If either one of them is clicked, both turn invisible
+
 				
-				if(pressedText + 2 == customers[i].getMaskNum())
+				if(pressedText != -1) //debug
 				{
-					customers[i].setWalking(false);
-					wait(1250);
-					customers[i].setMaskNum(1);
-					customers[i].setWalking(true);
+					System.out.println(pressedText);
 				}
-				else if(pressedText != -1)
+				
+				
+				if(pressedText != -1 && customers[i].getPosX()>barrier)
 				{
-					customers[i].setWalking(false);
-					wait(1250);
-					player.loseLife();
-					customers[i].setWalking(true);
+					if(pressedText + 2 == customers[i].getMaskNum())
+					{
+						customers[i].setWalking(false);
+						wait(1250);
+						customers[i].setMaskNum(1);
+						customers[i].setWalking(true);
+					}
+					else
+					{
+						System.out.println("Hi"); //debug
+						customers[i].setWalking(false);
+						player.loseLife();
+						wait(1250);
+						customers[i].setWalking(true);
+					}
 				}
+				
 			}
 		}
 	}
@@ -871,53 +774,16 @@ public class CovidVendor extends JPanel {
 			}
 		}
 	}
-//	
-//	public void validateFloatTextPress() //Checks if right floating text is pressed
-//	{
-//		int mask, floatTextNum=0;
-//		
-//		for(int i=0; i<floatTexts.length; i++)
-//		{
-//			if(floatTexts[i].isClicked())
-//			{
-//				floatTextNum = i;
-//			}
-//			else
-//			{
-//				floatTextNum = -1;
-//			}
-//		}
-//		
-//		for(int i=0; i<customers.length; i++)
-//		{
-//			if(customers[i].isWalking())
-//			{
-//				mask = customers[i].getMaskNum();
-//				
-//				if(floatTextNum == 0 && mask == 2) //checks if right floating text is pressed according to customer's maskNum
-//				{
-//					System.out.println("Yes");
-//					wait(1000);
-//					customers[i].setMaskNum(1); //Redraws customer as fully masked if the right floating text is pressed
-//				}
-//				else if(floatTextNum == 1 && mask == 3)
-//				{
-//					System.out.println("Yes");
-//					wait(1000);
-//					customers[i].setMaskNum(1); //Redraws customer as fully masked if the right floating text is pressed
-//				}
-//
-//			}
-//		}
-//		
-//		
-//	}
+
+	
+	
+	
 	
 	public void moveAwayCustomer(int i) //Moves customer off the map and enables walking for the next customer
 	{
 		customers[i].setVisible(false);
-		customers[i].setPosX(10000);
-		customers[i].setPosY(10000);
+		customers[i].setPosX(-10000);
+		customers[i].setPosY(-10000);
 		
 		if(i != customers.length-1)
 		{
@@ -928,7 +794,7 @@ public class CovidVendor extends JPanel {
 	
 	public int getFloatTextIndex(int mouseX, int mouseY)
 	{
-		int xThreshold, yThreshold, index=-1;
+		int xThreshold=0, yThreshold=0, index=-1;
 		
 		for(int i=0; i<floatTexts.length; i++)
 		{
@@ -945,18 +811,44 @@ public class CovidVendor extends JPanel {
 					break;
 					
 				default:
-					xThreshold = 0;
-					yThreshold = 0;
 					break;
 			}
+			
 			if(mouseX>=floatTexts[i].getPosX() && mouseX<=floatTexts[i].getPosX()+xThreshold && mouseY>=floatTexts[i].getPosY() && mouseY<=floatTexts[i].getPosY()+yThreshold)
 			{
-				setFloatTextVisibility(false); //If either one of them is clicked, both turn invisible
 				index = i;
 			}
 		}
 		
 		return index;
+	}
+	
+	
+	
+	
+	public void checkGameOver() //Checks if player has lost all their lives, or if their score is 0
+	{
+		int count = 0;
+		
+		if(player.getLives() <= 0)
+		{
+			gameState = -2;
+		}
+		else
+		{
+			for(int i=0; i<customers.length; i++)
+			{
+				if(customers[i].isVisible() == false && customers[i].getPosX()<0)
+				{
+					count ++;
+				}
+			}
+			
+			if(count == customers.length && player.getScore() <=0)
+			{
+				gameState = -2;
+			}
+		}
 	}
 	
 }
