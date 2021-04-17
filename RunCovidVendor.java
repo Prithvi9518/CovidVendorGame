@@ -1,13 +1,14 @@
 package Programming_Project;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
-import javax.swing.ImageIcon;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.Timer;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public class RunCovidVendor extends JPanel {
 
@@ -29,6 +30,26 @@ public class RunCovidVendor extends JPanel {
 
 		//Set up mouse
 		myGame.setupMouse();
+		
+		//Play music
+		playMusic("BGMmusic.wav");
 	}
-
+	
+	
+	public static void playMusic(String filePath)
+	{
+		InputStream music;
+		
+		try
+		{
+			music = new FileInputStream(new File(filePath));
+			AudioStream audio = new AudioStream(music);
+			AudioPlayer.player.start(audio);
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null,"Error");
+		}
+				
+	}
 }
