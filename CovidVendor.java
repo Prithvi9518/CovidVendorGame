@@ -46,6 +46,8 @@ public class CovidVendor extends JPanel {
 	private int floatTextPressed = -2; //Used to check whether a floating text is clicked or not
 	
 	private boolean orderPhase = false, prepPhase = false, servePhase = false;
+	
+	private UIButton playButton = new UIButton(260,270), exitButton = new UIButton(320,470);
 
 	
 //Constructor
@@ -112,6 +114,10 @@ public class CovidVendor extends JPanel {
 			}
 			
 		}
+		else if(gameState == -1)
+		{
+			drawMadeIt(g);
+		}
 		else if(gameState == -2)
 		{
 			drawGameOver(g);
@@ -144,6 +150,7 @@ public class CovidVendor extends JPanel {
 	   {
 		   customersWalk(); //Customers walk one by one to collect their orders.
 		   checkGameOver();
+		   checkMadeIt();
 	   }
 	   
 	   
@@ -227,9 +234,17 @@ public class CovidVendor extends JPanel {
 //Drawing the main menu
    public void drawMenu(Graphics g)
    {
-	   String startMenuFilename = "clickToStart.jpg";
-       ImageIcon startMenuImg = new ImageIcon(startMenuFilename); 
-	   g.drawImage(startMenuImg.getImage(), 0 ,0 , null); 
+//	   String startMenuFilename = "clickToStart.jpg";
+//       ImageIcon startMenuImg = new ImageIcon(startMenuFilename); 
+//	   g.drawImage(startMenuImg.getImage(), 0 ,0 , null); 
+	   
+	   String playButtonFilename = "playButton.png";
+	   ImageIcon playButtonImg = new ImageIcon(playButtonFilename);
+	   g.drawImage(playButtonImg.getImage(),(int)playButton.getPosX(),(int)playButton.getPosY(),null);
+	   
+	   String exitButtonFilename = "exitButton.png";
+	   ImageIcon exitButtonImg = new ImageIcon(exitButtonFilename);
+	   g.drawImage(exitButtonImg.getImage(),(int)exitButton.getPosX(),(int)exitButton.getPosY(),null);
    }
    
  //Drawing game over screen
@@ -242,7 +257,14 @@ public class CovidVendor extends JPanel {
 	   g.drawString("without losing all your lives!",200, 600);
    }
    
- 
+ //Drawing win screen
+   public void drawMadeIt(Graphics g)
+   {
+	    g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+		g.setColor(Color.WHITE);
+		g.drawString("You made it!",400,400);
+		g.drawString("Score: "+player.getScore(),400, 600);
+   }
    
    
 //Drawing the customer order dialogues. 
@@ -494,9 +516,7 @@ public class CovidVendor extends JPanel {
 				
 				if(gameState==0)
 				{
-					gameState = 1;
-					startTime = new Date(System.currentTimeMillis());
-				    customerIndex = 0; //To check if the first button click matches with the first customer's order. See below for more details
+					checkMenuButtonPress(me.getX(), me.getY());
 				}
 				
 				
@@ -788,6 +808,11 @@ public class CovidVendor extends JPanel {
 		if(i != customers.length-1)
 		{
 			customers[i+1].setWalking(true);
+			setFloatTextVisibility(true);
+			for(int j=0; j<floatTexts.length; j++)
+			{
+				floatTexts[j].setClicked(false);
+			}
 		}
 	}
 	
@@ -816,7 +841,21 @@ public class CovidVendor extends JPanel {
 			
 			if(mouseX>=floatTexts[i].getPosX() && mouseX<=floatTexts[i].getPosX()+xThreshold && mouseY>=floatTexts[i].getPosY() && mouseY<=floatTexts[i].getPosY()+yThreshold)
 			{
-				index = i;
+				if(floatTexts[i].isClicked())
+				{
+					index = -1;
+				}
+				
+				else
+				{
+					index = i;
+				
+					for(int j=0; j<floatTexts.length; j++) //If one text is clicked, both of them turn invisible
+					{
+						floatTexts[j].setClicked(true);
+					}
+				}
+				
 			}
 		}
 		
@@ -848,6 +887,33 @@ public class CovidVendor extends JPanel {
 			{
 				gameState = -2;
 			}
+		}
+	}
+	
+	public void checkMadeIt()
+	{
+		if(customers[customers.length-1].isVisible() == false)
+		{
+			if(player.getScore()>0 && player.getLives()>0)
+			{
+				gameState = -1;
+			}
+		}
+	}
+	
+	
+	
+	public void checkMenuButtonPress(int mouseX, int mouseY)
+	{
+		if(mouseX>=playButton.getPosX() && mouseX<=playButton.getPosX()+512 && mouseY>=playButton.getPosY() && mouseY<=playButton.getPosY()+223)
+		{
+			gameState = 1;
+			startTime = new Date(System.currentTimeMillis());
+			customerIndex = 0; //To check if the first button click matches with the first customer's order. See below for more details
+		}
+		else if(mouseX>=exitButton.getPosX() && mouseX<=exitButton.getPosX()+350 && mouseY>=exitButton.getPosY() && mouseY<=exitButton.getPosY()+150)
+		{
+			System.exit(0);
 		}
 	}
 	
