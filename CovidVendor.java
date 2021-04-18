@@ -24,7 +24,7 @@ public class CovidVendor extends JPanel {
 	private Vendor player;
 	private Customer[] customers;
 	
-	private int gameState; //0 = Main Menu   -1 = Winning Screen  -2 = Game Over   1,2,3 = Levels
+	private int gameState; //0 = Main Menu   -1 = Winning Screen  -2 = Game Over   1,2,3,... = Levels
 	
 	private Date startTime; //starts timer after you click from the main menu.
 	private double gameTimeSeconds; //counts the time for which the level has been running.
@@ -35,16 +35,10 @@ public class CovidVendor extends JPanel {
 	
 	private int barrier = 200; //Used to set the x-position at which the customer stops walking and picks up their food.
 	
-	private boolean barrierReached;
-	
-	private boolean served;
-	
 	private FloatText[] floatTexts;
 	
 	
 	private double orderStart, orderEnd, prepStart, prepEnd, serveStart, countdown;
-
-	private int floatTextPressed; //Used to check whether a floating text is clicked or not
 	
 	private boolean orderPhase, prepPhase, servePhase; //To track phases
 	
@@ -523,15 +517,11 @@ public class CovidVendor extends JPanel {
 						{
 							if(buttonPressed+1 == customers[customerIndex].getDishNum()) //Checking if button value matches customer DishNum
 							{
-	
-								player.setOrderCheck(customerIndex,true);
-								System.out.println(player.getOrderCheck(customerIndex));
-								
+								player.setOrderCheck(customerIndex,true);								
 							}
 							else
 							{
 								player.setOrderCheck(customerIndex,false);
-								System.out.println(player.getOrderCheck(customerIndex));
 							}
 							
 							customerIndex++;
@@ -956,16 +946,13 @@ public class CovidVendor extends JPanel {
 		buttons = new Button[4]; 
 		setupButtons();
 		
-//      orderStart=4, orderEnd=10, prepStart=12,prepEnd=22,serveStart=23;//To set when each phase starts and ends
-
+//Setting the timings of each phase, is different for every level
 	    orderStart = 4;
 		orderEnd = 10 + (level-1)*2;
 		prepStart = orderEnd + 2;
 		prepEnd = prepStart + 10 + level;
 		serveStart = prepEnd + 1;
 		
-		barrierReached = false;
-		served = false;
 		
 		//Sets length of ordersCheck array in Vendor class equal to the number of customers
 		player.setLengthOrdersCheck(customers.length);
@@ -974,9 +961,8 @@ public class CovidVendor extends JPanel {
 		prepPhase = false;
 		servePhase = false;
 		
-		floatTextPressed = -2;
 		
-		previousLevel = level;
+		previousLevel = level; //Used to store value of the level you were in, used in the replay and next level features
 		
 	}
 	
