@@ -9,10 +9,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
@@ -50,13 +54,23 @@ public class CovidVendor extends JPanel {
 	
 	private int previousLevel; //used to store gameState value of the finished level
 	private int lastLevel = 4; //To set a cap on number of levels
+	
+	
+	//Adding the tournament and player details
+	private Tournament tour;
+	private String gamertag;
+	private int age;
 
 	
 //Constructor
-	public CovidVendor()
+	public CovidVendor(Tournament tour, String gamertag, int age)
 	{
 		//Initialize gameState
 		gameState = 0;
+		
+		this.tour = tour;
+		this.age = age;
+		this.gamertag = gamertag;
 	}
 	
 
@@ -895,6 +909,18 @@ public class CovidVendor extends JPanel {
 	{
 		if(mouseX>=exitButton.getPosX() && mouseX<=exitButton.getPosX()+330 && mouseY>=exitButton.getPosY() && mouseY<=exitButton.getPosY()+132)
 		{
+			tour.addScore(new Score(gamertag, age, player.getScore(),previousLevel));
+
+			try {
+				FileWriter writer = new FileWriter("scores.txt", true); //Sets up new writer everytime
+				writer.write(gamertag+" "+age+" "+player.getScore()+" "+previousLevel+"\n");
+				System.out.println("\n");
+				writer.close();
+			} catch (IOException ex) {
+				Logger.getLogger(CovidVendor.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			
+			
 			JComponent comp = (JComponent) me.getSource();
 			Window win = SwingUtilities.getWindowAncestor(comp);
 			win.dispose();
@@ -903,8 +929,20 @@ public class CovidVendor extends JPanel {
 	
 	public void checkExitButton2Press(int mouseX, int mouseY, MouseEvent me) //Another version of exit button
 	{
+		tour.addScore(new Score(gamertag, age, player.getScore(),previousLevel));
+
 		if(mouseX>=exitButton2.getPosX() && mouseX<=exitButton2.getPosX()+330 && mouseY>=exitButton2.getPosY() && mouseY<=exitButton2.getPosY()+132)
 		{
+			try {
+				FileWriter writer = new FileWriter("scores.txt", true); //Sets up new writer everytime
+				writer.write(gamertag+" "+age+" "+player.getScore()+" "+previousLevel+"\n");
+				System.out.println("\n");
+				writer.close();
+			} catch (IOException ex) {
+				Logger.getLogger(CovidVendor.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			
+			
 			JComponent comp = (JComponent) me.getSource();
 			Window win = SwingUtilities.getWindowAncestor(comp);
 			win.dispose();

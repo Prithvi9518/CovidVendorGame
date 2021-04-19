@@ -32,13 +32,22 @@ public class RunCovidVendor extends JPanel {
 		//Set up Tournament
 		Tournament covidVendorTourney = new Tournament("Covid Vendor Tournament", 1000, "Covid Vendor", listScores);
 		
-		System.out.println("Enter 1- play game, 2- Display all scores, 3- Show highest score, 4-Enter new score  5- exit");
-		int userInput = Integer.parseInt(scanner.nextLine());
+		//Player Details
+		String gamerTag;
+		int Age;
 		
-		while(userInput != 5)
+		System.out.println("Enter 1- play game, 2- Display all scores, 3- Show highest score, 4- exit");
+		int userInput = scanner.nextInt();
+		
+		while(userInput != 4)
 		{
 			if(userInput == 1) //Play the game
 			{
+				System.out.println("Enter gamer tag:");
+				gamerTag = scanner.next();
+				System.out.println("Enter your age:");
+				Age = scanner.nextInt();
+				
 				//Setup Frame and Grpahics object
 				JFrame frame = new JFrame("Covid Vendor");
 
@@ -51,7 +60,7 @@ public class RunCovidVendor extends JPanel {
 				frame.setBackground(Color.black);
 
 				//Create my game and add to the frame
-				CovidVendor myGame = new CovidVendor();
+				CovidVendor myGame = new CovidVendor(covidVendorTourney, gamerTag, Age);
 				frame.getContentPane().add(myGame);
 
 				//Set up mouse
@@ -87,43 +96,12 @@ public class RunCovidVendor extends JPanel {
 				System.out.println("The highest Score is "+covidVendorTourney.maxValue());
 			}
 			
-			else if(userInput == 4) //Enter new score
-			{
-				FileWriter writer = new FileWriter("scores.txt", true); //Sets up new writer everytime
-				listScores.add(new Score());
-				
-				String gamertag;
-				int age;
-				int score;
-				int level;
-				
-				System.out.println("Enter gamer tag: ");
-				gamertag = scanner.next();
-				listScores.get(listScores.size()-1).setGamertag(gamertag);
-				
-				System.out.println("Enter age:");
-				age = scanner.nextInt();
-				listScores.get(listScores.size()-1).setAge(age);
-				
-				System.out.println("Enter score:");
-				score= scanner.nextInt();
-				listScores.get(listScores.size()-1).setScore(score);
-				
-				System.out.println("Enter level:");
-				level = scanner.nextInt();
-				listScores.get(listScores.size()-1).setLevel(level);
-
-				writer.write(gamertag+" "+age+" "+score+" "+level+"\n");
-				System.out.println("\n");
-				writer.close();
-			}
-
-			System.out.println("Enter 1- play game, 2- Display all scores, 3- Show highest score, 4-Enter new score  5- exit");
+			System.out.println("Enter 1- play game, 2- Display all scores, 3- Show highest score, 4- exit");
 			userInput = scanner.nextInt();
 			
 		}
 		
-		if(userInput == 5)
+		if(userInput == 4)
 		{
 			System.exit(0);
 		}

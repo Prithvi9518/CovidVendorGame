@@ -100,6 +100,11 @@ public class Tournament {
         }
         
     }
+	
+	public void addScore(Score score)
+	{
+		listScores.add(score);
+	}
     
     
     
